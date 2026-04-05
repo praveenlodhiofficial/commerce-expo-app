@@ -1,0 +1,43 @@
+# Dependencies
+node_modules
+
+# Expo
+.expo
+.expo-shared
+
+# Build / output
+dist
+build
+web-build
+
+# Native platforms
+android
+ios
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment files
+.env
+.env.*
+
+# Coverage
+coverage
+
+# Cache
+.cache
+
+# Lock files (optional, usually formatted already)
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Assets (optional – if you don’t want formatting checks here)
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.svg
