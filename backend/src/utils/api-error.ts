@@ -6,6 +6,10 @@ interface ApiErrorInterface {
   stack?: string;
 }
 
+/* ============================================================================= */
+/*                                API ERROR CLASS                                */
+/* ============================================================================= */
+
 class ApiError extends Error implements ApiErrorInterface {
   public statusCode: number;
   public success: boolean;
@@ -23,7 +27,7 @@ class ApiError extends Error implements ApiErrorInterface {
     this.success = false;
     this.errors = errors;
 
-    // Clean stack trace
+    // =====================================> Clean stack trace
     Error.captureStackTrace(this, this.constructor);
   }
 }

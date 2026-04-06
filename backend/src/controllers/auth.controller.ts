@@ -3,17 +3,13 @@ import { Request, Response } from "express";
 import { config } from "@/config";
 import { LoginSchema, RegisterSchema } from "@/schema/auth.schema";
 import { loginService, registerService } from "@/services/auth.service";
-import {
-  loginAuthService,
-  logoutAuthService,
-  refreshAuthService,
-} from "@/services/session.service";
+import { createSession, refreshSession, revokeSession } from "@/services/session.service";
 import { ApiError } from "@/utils/api-error";
 import { sendErrorResponse } from "@/utils/error-handler";
 
-/* -------------------------------------------------------------------------- */
-/*                            REGISTER CONTROLLER                              */
-/* -------------------------------------------------------------------------- */
+/* ============================================================================= */
+/*                            REGISTER CONTROLLER                                */
+/* ============================================================================= */
 
 export async function registerController(req: Request, res: Response) {
   try {
@@ -29,16 +25,16 @@ export async function registerController(req: Request, res: Response) {
   }
 }
 
-/* -------------------------------------------------------------------------- */
-/*                            LOGIN CONTROLLER                                */
-/* -------------------------------------------------------------------------- */
+/* ============================================================================= */
+/*                             LOGIN CONTROLLER                                 */
+/* ============================================================================= */
 
 export async function loginController(req: Request, res: Response) {
   try {
     const parsed = LoginSchema.parse(req.body);
     const user = await loginService(parsed);
     const { accessToken, refreshToken, accessExpiresAt, refreshExpiresAt, tokenType } =
-      await loginAuthService(user, config.auth);
+      await createSession(user, config.auth);
 
     res.status(200).json({
       success: true,
@@ -56,9 +52,9 @@ export async function loginController(req: Request, res: Response) {
   }
 }
 
-/* -------------------------------------------------------------------------- */
-/*                            REFRESH TOKEN CONTROLLER                         */
-/* -------------------------------------------------------------------------- */
+/* ============================================================================= */
+/*                         REFRESH TOKEN CONTROLLER                             */
+/* ============================================================================= */
 
 export async function refreshController(req: Request, res: Response) {
   try {
@@ -74,7 +70,7 @@ export async function refreshController(req: Request, res: Response) {
       refreshExpiresAt,
       user,
       tokenType,
-    } = await refreshAuthService(refreshToken, config.auth);
+    } = await refreshSession(refreshToken, config.auth);
 
     res.status(200).json({
       success: true,
@@ -92,13 +88,13 @@ export async function refreshController(req: Request, res: Response) {
   }
 }
 
-/* -------------------------------------------------------------------------- */
-/*                              LOGOUT CONTROLLER                             */
-/* -------------------------------------------------------------------------- */
+/* ============================================================================= */
+/*                              LOGOUT CONTROLLER                               */
+/* ============================================================================= */
 
 export async function logoutController(req: Request, res: Response) {
   try {
-    const { refreshToken } = req.body as Record<string, unknown>;
+    const refreshToken = (req.body as Record<string, unknown> | undefined)?.refreshToken;
     if (!refreshToken) {
       return res.status(200).json({
         success: true,
@@ -106,7 +102,7 @@ export async function logoutController(req: Request, res: Response) {
       });
     }
 
-    await logoutAuthService(refreshToken as string);
+    await revokeSession(refreshToken as string);
 
     res.status(200).json({
       success: true,

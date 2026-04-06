@@ -2,20 +2,24 @@ import { createRefreshSession, findRefreshSession, revokeRefreshSession } from "
 import { ApiError } from "@/utils/api-error";
 import { signAccessToken, signRefreshToken } from "@/utils/session";
 
-type AuthUser = {
+type SessionUser = {
   id: string;
   name: string;
   email: string;
   role: "USER" | "ADMIN";
 };
 
-type AuthConfig = {
+type SessionConfig = {
   jwtSecret: string;
   accessTokenTtlSeconds: number;
   refreshTokenTtlSeconds: number;
 };
 
-export async function loginAuthService(user: AuthUser, config: AuthConfig) {
+/* ============================================================================= */
+/*                           CREATE SESSION SERVICE                              */
+/* ============================================================================= */
+
+export async function createSession(user: SessionUser, config: SessionConfig) {
   const { token: accessToken, expiresAt: accessExpiresAt } = await signAccessToken(
     {
       userId: user.id,
@@ -43,7 +47,11 @@ export async function loginAuthService(user: AuthUser, config: AuthConfig) {
   };
 }
 
-export async function refreshAuthService(refreshToken: string, config: AuthConfig) {
+/* ============================================================================= */
+/*                          REFRESH SESSION SERVICE                              */
+/* ============================================================================= */
+
+export async function refreshSession(refreshToken: string, config: SessionConfig) {
   try {
     const session = await findRefreshSession(refreshToken);
 
@@ -93,7 +101,11 @@ export async function refreshAuthService(refreshToken: string, config: AuthConfi
   }
 }
 
-export async function logoutAuthService(refreshToken: string) {
+/* ============================================================================= */
+/*                           REVOKE SESSION SERVICE                              */
+/* ============================================================================= */
+
+export async function revokeSession(refreshToken: string) {
   const session = await findRefreshSession(refreshToken);
 
   if (session) {

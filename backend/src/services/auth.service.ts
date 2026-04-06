@@ -4,9 +4,9 @@ import { createUser, findUserByEmail } from "@/dal/auth.dal";
 import type { Login, Register } from "@/schema/auth.schema";
 import { ApiError } from "@/utils/api-error";
 
-/* -------------------------------------------------------------------------- */
-/*                               REGISTER SERVICE                              */
-/* -------------------------------------------------------------------------- */
+/* ============================================================================= */
+/*                               REGISTER SERVICE                               */
+/* ============================================================================= */
 
 export async function registerService(data: Register) {
   const existingUser = await findUserByEmail(data.email);
@@ -29,9 +29,9 @@ export async function registerService(data: Register) {
   return safeUser;
 }
 
-/* -------------------------------------------------------------------------- */
-/*                               LOGIN SERVICE                                */
-/* -------------------------------------------------------------------------- */
+/* ============================================================================= */
+/*                                LOGIN SERVICE                                 */
+/* ============================================================================= */
 
 export async function loginService(data: Login) {
   const doesUserExist = await findUserByEmail(data.email);

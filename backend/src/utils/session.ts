@@ -1,10 +1,18 @@
 import type { Request, Response } from "express";
 import { jwtVerify, SignJWT } from "jose";
 
+/* ============================================================================= */
+/*                              SESSION PAYLOAD                                  */
+/* ============================================================================= */
+
 export type SessionPayload = {
   userId: string;
   role: "USER" | "ADMIN";
 };
+
+/* ============================================================================= */
+/*                              SESSION CONFIG                                   */
+/* ============================================================================= */
 
 export type SessionConfig = {
   secret: string;
@@ -38,9 +46,10 @@ function cookieOptions(cfg: SessionConfig, expires: Date) {
   };
 }
 
-/* -------------------------------------------------------------------------- */
-/*                         BEARER TOKEN (AUTH HEADER)                          */
-/* -------------------------------------------------------------------------- */
+/* ============================================================================= */
+/*                        BEARER TOKEN (AUTH HEADER)                            */
+/* ============================================================================= */
+
 export function getBearerTokenFromRequest(req: Request): string | null {
   const authHeader = req.headers.authorization;
   if (!authHeader) return null;
@@ -51,6 +60,10 @@ export function getBearerTokenFromRequest(req: Request): string | null {
   return token;
 }
 
+/* ============================================================================= */
+/*                           BEARER SESSION HELPERS                             */
+/* ============================================================================= */
+
 export async function getSessionFromBearerToken(
   req: Request,
   cfg: SessionConfig
@@ -59,9 +72,10 @@ export async function getSessionFromBearerToken(
   return verifySessionToken(token ?? undefined, cfg);
 }
 
-/* -------------------------------------------------------------------------- */
-/*                          ENCRYPT / SIGN SESSION                             */
-/* -------------------------------------------------------------------------- */
+/* ============================================================================= */
+/*                         ENCRYPT / SIGN SESSION                               */
+/* ============================================================================= */
+
 export async function signSession(payload: SessionPayload, cfg: SessionConfig) {
   const now = Date.now();
   const expiresAt = new Date(now + cfg.ttlSeconds * 1000);
@@ -95,9 +109,10 @@ export async function signRefreshToken(userId: string, secret: string, ttlSecond
   return { token, expiresAt };
 }
 
-/* -------------------------------------------------------------------------- */
-/*                          DECRYPT / VERIFY SESSION                           */
-/* -------------------------------------------------------------------------- */
+/* ============================================================================= */
+/*                         DECRYPT / VERIFY SESSION                             */
+/* ============================================================================= */
+
 export async function verifySessionToken(
   token: string | undefined,
   cfg: SessionConfig
@@ -123,9 +138,10 @@ export async function verifySessionToken(
   }
 }
 
-/* -------------------------------------------------------------------------- */
-/*                           CREATE SESSION (SET COOKIE)                       */
-/* -------------------------------------------------------------------------- */
+/* ============================================================================= */
+/*                        CREATE SESSION (SET COOKIE)                          */
+/* ============================================================================= */
+
 export async function createSessionCookie(
   res: Response,
   userId: string,
@@ -138,9 +154,10 @@ export async function createSessionCookie(
   res.cookie(name, token, cookieOptions(cfg, expiresAt));
 }
 
-/* -------------------------------------------------------------------------- */
-/*                           READ SESSION (FROM COOKIE)                        */
-/* -------------------------------------------------------------------------- */
+/* ============================================================================= */
+/*                        READ SESSION (FROM COOKIE)                           */
+/* ============================================================================= */
+
 export async function getSessionFromRequest(
   req: Request,
   cfg: SessionConfig
@@ -152,13 +169,10 @@ export async function getSessionFromRequest(
   return verifySessionToken(token, cfg);
 }
 
-/* -------------------------------------------------------------------------- */
-/*                           REFRESH SESSION (SLIDING)                         */
-/* -------------------------------------------------------------------------- */
-/**
- * If valid session exists, re-issue a fresh JWT and extend cookie expiry.
- * This is the sliding-session behavior for JWT-in-cookie auth.
- */
+/* ============================================================================= */
+/*                        REFRESH SESSION (SLIDING)                            */
+/* ============================================================================= */
+
 export async function refreshSessionCookie(req: Request, res: Response, cfg: SessionConfig) {
   const session = await getSessionFromRequest(req, cfg);
   if (!session) return null;
@@ -167,9 +181,10 @@ export async function refreshSessionCookie(req: Request, res: Response, cfg: Ses
   return session;
 }
 
-/* -------------------------------------------------------------------------- */
-/*                           DELETE SESSION                                    */
-/* -------------------------------------------------------------------------- */
+/* ============================================================================= */
+/*                              DELETE SESSION                                  */
+/* ============================================================================= */
+
 export function deleteSessionCookie(res: Response, cfg: SessionConfig) {
   const name = cfg.cookieName ?? "session";
 
