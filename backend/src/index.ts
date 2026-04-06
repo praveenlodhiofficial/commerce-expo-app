@@ -1,10 +1,11 @@
-import { config } from '@/config';
+import { config } from '@/config.js';
 import express from 'express';
 
 const app = express();
+console.log('Config:', config);
 
 app.get('/signup', (req, res) => {
-    res.send('Hello, World!');
+    res.send('Signup endpoint');
 });
 
 app.listen(config.port, () => {
