@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
-import type { Login, Register } from "@/schema/auth.schema";
+
 import { createUser, findUserByEmail } from "@/dal/auth.dal";
+import type { Login, Register } from "@/schema/auth.schema";
 import { ApiError } from "@/utils/api-error";
 
 /* -------------------------------------------------------------------------- */

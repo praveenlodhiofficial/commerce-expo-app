@@ -4,14 +4,12 @@ import { config } from "@/config";
 import { LoginSchema, RegisterSchema } from "@/schema/auth.schema";
 import { loginService, registerService } from "@/services/auth.service";
 import {
-  createRefreshSession,
-  signAccessToken,
-  signRefreshToken,
-  verifyAndRotateRefreshToken,
-  revokeRefreshTokenByToken,
-} from "../services/token.service";
-import { sendErrorResponse } from "@/utils/error-handler";
+  loginAuthService,
+  logoutAuthService,
+  refreshAuthService,
+} from "@/services/session.service";
 import { ApiError } from "@/utils/api-error";
+import { sendErrorResponse } from "@/utils/error-handler";
 
 /* -------------------------------------------------------------------------- */
 /*                            REGISTER CONTROLLER                              */
@@ -39,29 +37,8 @@ export async function loginController(req: Request, res: Response) {
   try {
     const parsed = LoginSchema.parse(req.body);
     const user = await loginService(parsed);
-
-    const { token: accessToken, expiresAt: accessExpiresAt } =
-      await signAccessToken(
-        {
-          userId: user.id,
-          role: user.role,
-        },
-        config.auth.jwtSecret,
-        config.auth.accessTokenTtlSeconds,
-      );
-
-    const { token: refreshToken, expiresAt: refreshExpiresAt } =
-      await signRefreshToken(
-        user.id,
-        config.auth.jwtSecret,
-        config.auth.refreshTokenTtlSeconds,
-      );
-
-    await createRefreshSession(
-      user.id,
-      refreshToken,
-      refreshExpiresAt,
-    );
+    const { accessToken, refreshToken, accessExpiresAt, refreshExpiresAt, tokenType } =
+      await loginAuthService(user, config.auth);
 
     res.status(200).json({
       success: true,
@@ -69,7 +46,7 @@ export async function loginController(req: Request, res: Response) {
         user,
         accessToken,
         refreshToken,
-        tokenType: "Bearer",
+        tokenType,
         accessExpiresAt: accessExpiresAt.toISOString(),
         refreshExpiresAt: refreshExpiresAt.toISOString(),
       },
@@ -85,29 +62,29 @@ export async function loginController(req: Request, res: Response) {
 
 export async function refreshController(req: Request, res: Response) {
   try {
-    const refreshToken = (req.body as Record<string, unknown>)?.refreshToken as
-      | string
-      | undefined;
+    const refreshToken = (req.body as Record<string, unknown>)?.refreshToken as string | undefined;
     if (!refreshToken) {
       throw new ApiError(400, "Refresh token is required");
     }
 
-    const { newAccessToken, newRefreshToken, user } =
-      await verifyAndRotateRefreshToken(
-        refreshToken,
-        config.auth.jwtSecret,
-        config.auth.accessTokenTtlSeconds,
-        config.auth.refreshTokenTtlSeconds,
-      );
+    const {
+      accessToken,
+      refreshToken: newRefreshToken,
+      accessExpiresAt,
+      refreshExpiresAt,
+      user,
+      tokenType,
+    } = await refreshAuthService(refreshToken, config.auth);
 
     res.status(200).json({
       success: true,
       data: {
         user,
-        accessToken: newAccessToken.token,
-        refreshToken: newRefreshToken.token,
-        accessExpiresAt: newAccessToken.expiresAt.toISOString(),
-        refreshExpiresAt: newRefreshToken.expiresAt.toISOString(),
+        accessToken,
+        refreshToken: newRefreshToken,
+        tokenType,
+        accessExpiresAt: accessExpiresAt.toISOString(),
+        refreshExpiresAt: refreshExpiresAt.toISOString(),
       },
     });
   } catch (error) {
@@ -116,7 +93,7 @@ export async function refreshController(req: Request, res: Response) {
 }
 
 /* -------------------------------------------------------------------------- */
-/*                              LOGOUT CONTROLLER                              */
+/*                              LOGOUT CONTROLLER                             */
 /* -------------------------------------------------------------------------- */
 
 export async function logoutController(req: Request, res: Response) {
@@ -129,7 +106,7 @@ export async function logoutController(req: Request, res: Response) {
       });
     }
 
-    await revokeRefreshTokenByToken(refreshToken as string);
+    await logoutAuthService(refreshToken as string);
 
     res.status(200).json({
       success: true,

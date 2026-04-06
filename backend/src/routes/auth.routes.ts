@@ -1,8 +1,9 @@
 import { Router } from "express";
+
 import {
+  loginController,
   logoutController,
   refreshController,
-  loginController,
   registerController,
 } from "@/controllers/auth.controller";
 

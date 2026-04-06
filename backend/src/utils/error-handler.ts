@@ -1,5 +1,6 @@
 import { Response } from "express";
-import { ZodError, z } from "zod";
+import { z, ZodError } from "zod";
+
 import { ApiError } from "@/utils/api-error";
 
 type ErrorResponse = {

@@ -4,8 +4,7 @@ import { PrismaClient } from "@/generated/prisma/client";
 
 const prismaClientSingleton = () => {
   const adapter = new PrismaPg({
-    connectionString:
-      process.env.DATABASE_URL_POOLER || process.env.DATABASE_URL,
+    connectionString: process.env.DATABASE_URL_POOLER || process.env.DATABASE_URL,
   });
 
   return new PrismaClient({

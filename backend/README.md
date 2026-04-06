@@ -118,16 +118,19 @@ src/
 ## Run Locally
 
 1. Install dependencies:
+
    ```bash
    pnpm install
    ```
 
 2. Start PostgreSQL with Docker (example):
+
    ```bash
    pnpm run docker:up
    ```
 
 3. Run Prisma migrations:
+
    ```bash
    pnpm run db:migrate
    ```

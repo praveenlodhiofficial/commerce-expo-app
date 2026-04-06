@@ -16,5 +16,5 @@ app.use("/api/v1", authRoutes);
 /* ================================ Server ================================= */
 app.listen(config.port, () => {
   console.log(`Server is running on port ${config.port}`);
-  console.log(`==========================================`)
+  console.log(`==========================================`);
 });
