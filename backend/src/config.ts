@@ -2,6 +2,9 @@ export const config = {
   port: process.env.PORT || 3000,
   auth: {
     jwtSecret: process.env.JWT_SECRET || "dev-secret-change-me",
-    jwtTtlSeconds: Number(process.env.JWT_TTL_SECONDS || 60 * 60 * 24 * 7),
+    accessTokenTtlSeconds: Number(process.env.ACCESS_TOKEN_TTL_SECONDS || 15 * 60),
+    refreshTokenTtlSeconds: Number(
+      process.env.REFRESH_TOKEN_TTL_SECONDS || 7 * 24 * 60 * 60,
+    ),
   },
 };

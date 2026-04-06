@@ -78,6 +78,34 @@ export async function signSession(
   return { token, expiresAt, payload };
 }
 
+export async function signAccessToken(
+  payload: SessionPayload,
+  secret: string,
+  ttlSeconds: number,
+) {
+  return signSession(payload, {
+    secret,
+    ttlSeconds,
+    secure: false,
+  });
+}
+
+export async function signRefreshToken(
+  userId: string,
+  secret: string,
+  ttlSeconds: number,
+) {
+  const expiresAt = new Date(Date.now() + ttlSeconds * 1000);
+
+  const token = await new SignJWT({ userId, type: "refresh" })
+    .setProtectedHeader({ alg: "HS256", typ: "JWT" })
+    .setIssuedAt()
+    .setExpirationTime(Math.floor(expiresAt.getTime() / 1000))
+    .sign(getEncodedKey(secret));
+
+  return { token, expiresAt };
+}
+
 /* -------------------------------------------------------------------------- */
 /*                          DECRYPT / VERIFY SESSION                           */
 /* -------------------------------------------------------------------------- */
