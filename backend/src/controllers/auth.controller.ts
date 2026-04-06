@@ -1,11 +1,12 @@
 import { Request, Response } from "express";
 
 import { config } from "@/config";
-import { LoginSchema, RegisterSchema } from "@/schema/auth.schema";
-import { loginService, registerService } from "@/services/auth.service";
+import { LoginSchema, RegisterSchema, UpdatePasswordSchema } from "@/schema/auth.schema";
+import { loginService, registerService, updatePasswordService } from "@/services/auth.service";
 import { createSession, refreshSession, revokeSession } from "@/services/session.service";
 import { ApiError } from "@/utils/api-error";
 import { sendErrorResponse } from "@/utils/error-handler";
+import { getSessionFromBearerToken } from "@/utils/session";
 
 /* ============================================================================= */
 /*                            REGISTER CONTROLLER                                */
@@ -53,7 +54,7 @@ export async function loginController(req: Request, res: Response) {
 }
 
 /* ============================================================================= */
-/*                         REFRESH TOKEN CONTROLLER                             */
+/*                               REFRESH CONTROLLER                              */
 /* ============================================================================= */
 
 export async function refreshController(req: Request, res: Response) {
@@ -107,6 +108,34 @@ export async function logoutController(req: Request, res: Response) {
     res.status(200).json({
       success: true,
       message: "Logged out",
+    });
+  } catch (error) {
+    return sendErrorResponse(error, res);
+  }
+}
+
+/* ============================================================================= */
+/*                           UPDATE PASSWORD CONTROLLER                          */
+/* ============================================================================= */
+
+export async function updatePasswordController(req: Request, res: Response) {
+  try {
+    const parsed = UpdatePasswordSchema.parse(req.body);
+    const session = await getSessionFromBearerToken(req, {
+      secret: config.auth.jwtSecret,
+      ttlSeconds: config.auth.accessTokenTtlSeconds,
+      secure: process.env.NODE_ENV === "production",
+    });
+
+    if (!session?.userId) {
+      throw new ApiError(401, "Unauthorized");
+    }
+
+    const result = await updatePasswordService(session.userId, parsed);
+
+    res.status(200).json({
+      success: true,
+      data: result,
     });
   } catch (error) {
     return sendErrorResponse(error, res);

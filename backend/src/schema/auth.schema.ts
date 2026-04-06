@@ -26,3 +26,17 @@ export const LoginSchema = UserSchema.pick({
 
 export type LoginInput = z.input<typeof LoginSchema>;
 export type Login = z.output<typeof LoginSchema>;
+
+/* -------------------------------------------------------------------------- */
+/*                           UPDATE PASSWORD SCHEMA                            */
+/* -------------------------------------------------------------------------- */
+
+export const UpdatePasswordSchema = z
+  .object({
+    currentPassword: z.string().min(6, "Current password must be at least 6 characters long"),
+    newPassword: z.string().min(6, "New password must be at least 6 characters long"),
+  })
+  .strict();
+
+export type UpdatePasswordInput = z.input<typeof UpdatePasswordSchema>;
+export type UpdatePassword = z.output<typeof UpdatePasswordSchema>;

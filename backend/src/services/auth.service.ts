@@ -1,7 +1,8 @@
 import bcrypt from "bcrypt";
 
-import { createUser, findUserByEmail } from "@/dal/auth.dal";
-import type { Login, Register } from "@/schema/auth.schema";
+import { createUser, findUserByEmail, findUserById, updateUserPassword } from "@/dal/auth.dal";
+import { revokeAllUserSessions } from "@/dal/session.dal";
+import type { Login, Register, UpdatePassword } from "@/schema/auth.schema";
 import { ApiError } from "@/utils/api-error";
 
 /* ============================================================================= */
@@ -49,4 +50,35 @@ export async function loginService(data: Login) {
   const { password, ...safeUser } = doesUserExist;
 
   return safeUser;
+}
+
+/* ============================================================================= */
+/*                           UPDATE PASSWORD SERVICE                             */
+/* ============================================================================= */
+
+export async function updatePasswordService(userId: string, payload: UpdatePassword) {
+  const user = await findUserById(userId);
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+
+  const currentPasswordValid = await bcrypt.compare(payload.currentPassword, user.password);
+  if (!currentPasswordValid) {
+    throw new ApiError(400, "Current password is incorrect");
+  }
+
+  const sameAsOld = await bcrypt.compare(payload.newPassword, user.password);
+  if (sameAsOld) {
+    throw new ApiError(400, "New password must be different from current password");
+  }
+
+  const hashedPassword = await bcrypt.hash(payload.newPassword, 10);
+
+  await updateUserPassword(userId, hashedPassword);
+  await revokeAllUserSessions(userId);
+
+  return {
+    success: true,
+    message: "Password updated successfully. Please login again.",
+  };
 }

@@ -14,11 +14,38 @@ export async function findUserByEmail(email: string) {
 }
 
 /* ============================================================================= */
+/*                              FIND USER BY ID                                 */
+/* ============================================================================= */
+
+export async function findUserById(id: string) {
+  return await prisma.user.findUnique({
+    where: {
+      id,
+    },
+  });
+}
+
+/* ============================================================================= */
 /*                               CREATE USER                                   */
 /* ============================================================================= */
 
 export async function createUser(data: RegisterInput) {
   return await prisma.user.create({
     data,
+  });
+}
+
+/* ============================================================================= */
+/*                           UPDATE USER PASSWORD                               */
+/* ============================================================================= */
+
+export async function updateUserPassword(userId: string, password: string) {
+  return await prisma.user.update({
+    where: {
+      id: userId,
+    },
+    data: {
+      password,
+    },
   });
 }
