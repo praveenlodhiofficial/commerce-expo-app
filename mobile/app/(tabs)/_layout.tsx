@@ -1,9 +1,13 @@
 import React from "react";
 
 import { Ionicons } from "@expo/vector-icons";
-import { Tabs } from "expo-router";
+import { Redirect, router, Tabs } from "expo-router";
+
+import { useAuth } from "@/hooks/use-auth";
 
 export default function HomeLayout() {
+  const { isAuthenticated } = useAuth();
+
   return (
     <Tabs
       screenOptions={({ route }) => ({
@@ -28,8 +32,35 @@ export default function HomeLayout() {
       })}
     >
       <Tabs.Screen name="home" options={{ title: "Home" }} />
-      <Tabs.Screen name="cart" options={{ title: "Cart" }} />
-      <Tabs.Screen name="profile" options={{ title: "Profile" }} />
+      <Tabs.Screen
+        name="cart"
+        options={{ title: "Cart" }}
+        listeners={{
+          tabPress: (e) => {
+            if (!isAuthenticated) {
+              // Prevent default action
+              e.preventDefault();
+              router.push("/auth/signin");
+            }
+          },
+        }}
+      />
+      <Tabs.Screen
+        name="profile"
+        options={{ title: "Profile" }}
+        listeners={{
+          tabPress: (e) => {
+            if (!isAuthenticated) {
+              // Prevent default action
+              e.preventDefault();
+              router.push("/auth/signin");
+            }
+          },
+        }}
+      />
+      
+      {/* <Tabs.Screen name="cart" options={{ title: "Cart" }} /> */}
+      {/* <Tabs.Screen name="profile" options={{ title: "Profile" }} /> */}
     </Tabs>
   );
 }

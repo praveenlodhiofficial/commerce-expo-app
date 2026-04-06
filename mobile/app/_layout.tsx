@@ -18,8 +18,8 @@ export default function RootLayout() {
       <StatusBar style="auto" />
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="login" />
-        <Stack.Screen name="register" />
+        <Stack.Screen name="auth/signup" options={{ headerShown: false }} />
+        <Stack.Screen name="auth/signin" options={{ headerShown: false }} />
       </Stack>
     </ThemeProvider>
   );
