@@ -76,6 +76,30 @@ Unhandled/internal error      -> 500 Internal Server Error
 
 ---
 
+## Mobile Auth Architecture (Access + Refresh)
+
+1. Client sends login request to `POST /signin` with email and password.
+2. Server validates credentials and returns:
+   - `accessToken` (short expiry)
+   - `refreshToken` (long expiry)
+3. Mobile app stores:
+   - `accessToken` in memory
+   - `refreshToken` in secure storage (Keychain / Keystore)
+4. Client calls protected APIs with header:
+   `Authorization: Bearer <accessToken>`
+5. Server verifies access token before route execution.
+6. When access token expires, client calls refresh endpoint to get a new access token.
+7. Refresh token is rotated on refresh (new token issued, old one invalidated).
+
+### Security Rules
+
+- Keep access token lifetime short.
+- Use HTTPS in production.
+- Rotate refresh token on every refresh call.
+- Revoke refresh token on logout.
+
+---
+
 ## Project Structure (Example)
 
 ```text

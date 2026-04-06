@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
-import { ApiError } from "../utils/api-error";
 import type { SignIn, SignUp } from "@/schema/auth.schema";
 import { createUser, findUserByEmail } from "@/dal/auth.dal";
+import { ApiError } from "@/utils/api-error";
 
 /* -------------------------------------------------------------------------- */
 /*                               SIGN-UP SERVICE                              */

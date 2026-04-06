@@ -10,7 +10,7 @@ export const SignUpSchema = UserSchema.pick({
   name: true,
   email: true,
   password: true,
-});
+}).strict();
 
 export type SignUpInput = z.input<typeof SignUpSchema>;
 export type SignUp = z.output<typeof SignUpSchema>;
@@ -22,7 +22,7 @@ export type SignUp = z.output<typeof SignUpSchema>;
 export const SignInSchema = UserSchema.pick({
   email: true,
   password: true,
-});
+}).strict();
 
 export type SignInInput = z.input<typeof SignInSchema>;
 export type SignIn = z.output<typeof SignInSchema>;
