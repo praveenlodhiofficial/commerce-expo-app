@@ -1,0 +1,29 @@
+name: mobile-commerce-app
+
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: mobile-commerce-app
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: mobile-commerce-app
+    ports:
+      - "5434:5432"
+    volumes:
+      - mobile-commerce-app-data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    name: mobile-commerce-network
+    driver: bridge
+
+volumes:
+  mobile-commerce-app-data:
+    external: false
+    name: mobile-commerce-app-data

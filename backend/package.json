@@ -1,19 +1,33 @@
 {
-  "name": "backend",
+  "name": "mobile-app-backend",
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "dev": "tsx watch --env-file=.env src/index.ts"
+    "dev": "tsx watch --env-file=.env src/index.ts",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md,mdx,css}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md,mdx,css}\"",
+    "db:generate": "prisma generate",
+    "db:studio": "prisma studio",
+    "db:migrate": "prisma migrate dev",
+    "db:deploy": "prisma migrate deploy",
+    "db:push": "prisma db push && prisma generate",
+    "db:reset": "prisma migrate reset --force",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down",
+    "postinstall": "prisma generate"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "module",
   "devDependencies": {
+    "@trivago/prettier-plugin-sort-imports": "^6.0.2",
     "@types/express": "^5.0.6",
     "@types/node": "^25.5.2",
     "nodemon": "^3.1.14",
+    "prettier": "^3.8.1",
+    "prettier-plugin-tailwindcss": "^0.7.2",
     "tsx": "^4.21.0",
     "typescript": "^6.0.2"
   },
