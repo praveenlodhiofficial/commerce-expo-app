@@ -1,13 +1,13 @@
 import bcrypt from "bcrypt";
-import type { SignIn, SignUp } from "@/schema/auth.schema";
+import type { Login, Register } from "@/schema/auth.schema";
 import { createUser, findUserByEmail } from "@/dal/auth.dal";
 import { ApiError } from "@/utils/api-error";
 
 /* -------------------------------------------------------------------------- */
-/*                               SIGN-UP SERVICE                              */
+/*                               REGISTER SERVICE                              */
 /* -------------------------------------------------------------------------- */
 
-export async function signupService(data: SignUp) {
+export async function registerService(data: Register) {
   const existingUser = await findUserByEmail(data.email);
 
   if (existingUser) {
@@ -29,10 +29,10 @@ export async function signupService(data: SignUp) {
 }
 
 /* -------------------------------------------------------------------------- */
-/*                               SIGN-IN SERVICE                              */
+/*                               LOGIN SERVICE                                */
 /* -------------------------------------------------------------------------- */
 
-export async function signinService(data: SignIn) {
+export async function loginService(data: Login) {
   const doesUserExist = await findUserByEmail(data.email);
 
   if (!doesUserExist) {

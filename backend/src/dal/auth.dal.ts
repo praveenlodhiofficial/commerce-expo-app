@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma";
-import { SignUpInput } from "@/schema/auth.schema";
+import { RegisterInput } from "@/schema/auth.schema";
 
 /* -------------------------------------------------------------------------- */
 /*                             FIND USER BY EMAIL                             */
@@ -17,7 +17,7 @@ export async function findUserByEmail(email: string) {
 /*                             CREATE USER                                    */
 /* -------------------------------------------------------------------------- */
 
-export async function createUser(data: SignUpInput) {
+export async function createUser(data: RegisterInput) {
   return await prisma.user.create({
     data,
   });

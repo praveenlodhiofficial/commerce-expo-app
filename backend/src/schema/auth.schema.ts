@@ -3,26 +3,26 @@ import { z } from "zod";
 import { UserSchema } from "@/schema/user.schema";
 
 /* -------------------------------------------------------------------------- */
-/*                               SIGN-UP SCHEMA                               */
+/*                               REGISTER SCHEMA                              */
 /* -------------------------------------------------------------------------- */
 
-export const SignUpSchema = UserSchema.pick({
+export const RegisterSchema = UserSchema.pick({
   name: true,
   email: true,
   password: true,
 }).strict();
 
-export type SignUpInput = z.input<typeof SignUpSchema>;
-export type SignUp = z.output<typeof SignUpSchema>;
+export type RegisterInput = z.input<typeof RegisterSchema>;
+export type Register = z.output<typeof RegisterSchema>;
 
 /* -------------------------------------------------------------------------- */
-/*                               SIGN-IN SCHEMA                               */
+/*                               LOGIN SCHEMA                                 */
 /* -------------------------------------------------------------------------- */
 
-export const SignInSchema = UserSchema.pick({
+export const LoginSchema = UserSchema.pick({
   email: true,
   password: true,
 }).strict();
 
-export type SignInInput = z.input<typeof SignInSchema>;
-export type SignIn = z.output<typeof SignInSchema>;
+export type LoginInput = z.input<typeof LoginSchema>;
+export type Login = z.output<typeof LoginSchema>;

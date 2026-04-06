@@ -5,7 +5,6 @@ import {
   revokeRefreshSession,
 } from "@/dal/refresh-session.dal";
 import { ApiError } from "@/utils/api-error";
-import { jwtVerify } from "jose";
 
 function getEncodedKey(secret: string) {
   return new TextEncoder().encode(secret);

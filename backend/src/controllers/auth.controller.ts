@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 
 import { config } from "@/config";
-import { SignInSchema, SignUpSchema } from "@/schema/auth.schema";
-import { signinService, signupService } from "@/services/auth.service";
+import { LoginSchema, RegisterSchema } from "@/schema/auth.schema";
+import { loginService, registerService } from "@/services/auth.service";
 import {
   createRefreshSession,
   signAccessToken,
@@ -14,13 +14,13 @@ import { sendErrorResponse } from "@/utils/error-handler";
 import { ApiError } from "@/utils/api-error";
 
 /* -------------------------------------------------------------------------- */
-/*                            SIGN-UP CONTROLLER                              */
+/*                            REGISTER CONTROLLER                              */
 /* -------------------------------------------------------------------------- */
 
-export async function signupController(req: Request, res: Response) {
+export async function registerController(req: Request, res: Response) {
   try {
-    const parsed = SignUpSchema.parse(req.body);
-    const user = await signupService(parsed);
+    const parsed = RegisterSchema.parse(req.body);
+    const user = await registerService(parsed);
 
     res.status(201).json({
       success: true,
@@ -32,13 +32,13 @@ export async function signupController(req: Request, res: Response) {
 }
 
 /* -------------------------------------------------------------------------- */
-/*                            SIGN-IN CONTROLLER                              */
+/*                            LOGIN CONTROLLER                                */
 /* -------------------------------------------------------------------------- */
 
-export async function signinController(req: Request, res: Response) {
+export async function loginController(req: Request, res: Response) {
   try {
-    const parsed = SignInSchema.parse(req.body);
-    const user = await signinService(parsed);
+    const parsed = LoginSchema.parse(req.body);
+    const user = await loginService(parsed);
 
     const { token: accessToken, expiresAt: accessExpiresAt } =
       await signAccessToken(
