@@ -7,6 +7,45 @@ import { Platform } from "react-native";
 const tintColorLight = "#0a7ea4";
 const tintColorDark = "#fff";
 
+export const AppTheme = {
+  colors: {
+    primary: "#1E7BFF",
+    primaryDeep: "#0D5EE0",
+    accent: "#10233F",
+    background: "#F4F8FF",
+    surface: "#FFFFFF",
+    surfaceMuted: "#ECF3FF",
+    text: "#13213A",
+    textMuted: "#5A6C88",
+    success: "#19A870",
+    danger: "#E2465A",
+    border: "#D8E5FF",
+  },
+  typography: {
+    hero: 40,
+    h1: 30,
+    h2: 24,
+    h3: 20,
+    body: 16,
+    bodySmall: 14,
+    caption: 12,
+  },
+  radius: {
+    sm: 10,
+    md: 16,
+    lg: 22,
+    xl: 30,
+    pill: 999,
+  },
+  spacing: {
+    xs: 6,
+    sm: 10,
+    md: 16,
+    lg: 24,
+    xl: 32,
+  },
+} as const;
+
 export const Colors = {
   light: {
     text: "#11181C",
@@ -28,8 +67,7 @@ export const Colors = {
 
 export const Fonts = Platform.select({
   ios: {
-    /** iOS `UIFontDescriptorSystemDesignDefault` */
-    sans: "system-ui",
+    sans: "Avenir Next",
     /** iOS `UIFontDescriptorSystemDesignSerif` */
     serif: "ui-serif",
     /** iOS `UIFontDescriptorSystemDesignRounded` */
@@ -38,16 +76,45 @@ export const Fonts = Platform.select({
     mono: "ui-monospace",
   },
   default: {
-    sans: "normal",
+    sans: "sans-serif",
     serif: "serif",
-    rounded: "normal",
+    rounded: "sans-serif-medium",
     mono: "monospace",
   },
   web: {
-    sans: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
+    sans: "'Avenir Next', 'Nunito Sans', 'Segoe UI', sans-serif",
     serif: "Georgia, 'Times New Roman', serif",
     rounded:
       "'SF Pro Rounded', 'Hiragino Maru Gothic ProN', Meiryo, 'MS PGothic', sans-serif",
     mono: "SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
   },
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// export const AppTheme = {
+//   colors: {
+//     primary: "#1E7BFF",
+//     primaryDeep: "#0D5EE0",
+//     accent: "#10233F",
+//     background: "#F4F8FF",
+//     surface: "#FFFFFF",
+//     surfaceMuted: "#ECF3FF",
+//     text: "#13213A",
+//     textMuted: "#5A6C88",
+//     success: "#19A870",
+//     danger: "#E2465A",
+//     border: "#D8E5FF",
+//   },

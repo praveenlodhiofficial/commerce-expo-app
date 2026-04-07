@@ -1,9 +1,17 @@
 import { useState } from "react";
-import { Pressable, Text, TextInput, View } from "react-native";
+import {
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 
 import { Ionicons } from "@expo/vector-icons";
 import { Link, router } from "expo-router";
 
+import { AppTheme } from "@/constants/theme";
 import { useAuth } from "@/hooks/use-auth";
 
 export default function Login() {
@@ -30,7 +38,7 @@ export default function Login() {
         password,
       });
 
-      router.replace("/(tabs)/home");
+      router.replace("/(tabs)/skills");
     } catch (error) {
       setErrorMessage(error instanceof Error ? error.message : "Login failed");
     } finally {
@@ -39,21 +47,54 @@ export default function Login() {
   };
 
   return (
-    <View className="flex h-screen justify-end bg-blue-300 p-3">
-      <View className="flex h-[80vh] flex-col justify-end rounded-[60px] rounded-tl-[999px] bg-white/80 p-5 shadow-inner shadow-white/70 backdrop-blur-2xl">
-        <Text className="mb-8 text-4xl font-medium">Login</Text>
+    <KeyboardAvoidingView
+      style={{ flex: 1, backgroundColor: AppTheme.colors.background }}
+      behavior={Platform.OS === "ios" ? "padding" : undefined}
+    >
+      <View className="flex-1 justify-end px-4 pb-8">
+        <View
+          className="rounded-[40px] border p-6"
+          style={{
+            borderColor: AppTheme.colors.border,
+            backgroundColor: AppTheme.colors.surface,
+            shadowColor: "#29161D",
+            shadowOpacity: 0.08,
+            shadowRadius: 14,
+            shadowOffset: { width: 0, height: 8 },
+            elevation: 5,
+          }}
+        >
+          <Text
+            style={{
+              fontSize: AppTheme.typography.h1,
+              color: AppTheme.colors.text,
+              fontWeight: "800",
+              marginBottom: 4,
+            }}
+          >
+            Welcome back
+          </Text>
+          <Text
+            style={{
+              fontSize: AppTheme.typography.body,
+              color: AppTheme.colors.textMuted,
+              marginBottom: 24,
+            }}
+          >
+            Sign in to continue your growth streak.
+          </Text>
 
         {errorMessage ? (
-          <View className="mb-4 rounded-2xl bg-red-50 px-4 py-3">
+          <View className="mb-4 rounded-2xl bg-red-50 px-4 py-3" style={{ borderWidth: 1, borderColor: "#F8CDD3" }}>
             <Text className="text-sm text-red-600">{errorMessage}</Text>
           </View>
         ) : null}
 
-        {/* Email */}
-        <View className="mb-3 flex flex-col gap-1">
-          <Text className="text-gray-500">Email</Text>
+        <View className="mb-4 flex flex-col gap-2">
+          <Text style={{ color: AppTheme.colors.textMuted, fontSize: 13, fontWeight: "600" }}>Email</Text>
           <TextInput
-            className="rounded-xl border border-zinc-400 py-2 pl-2"
+            className="rounded-2xl border px-4 py-3"
+            style={{ borderColor: AppTheme.colors.border, fontSize: AppTheme.typography.body }}
             placeholder="user@gmail.com"
             autoCapitalize="none"
             keyboardType="email-address"
@@ -62,14 +103,14 @@ export default function Login() {
           />
         </View>
 
-        {/* Password */}
-        <View className="mb-3 flex flex-col gap-1">
-          <Text className="text-gray-500">Password</Text>
+        <View className="mb-3 flex flex-col gap-2">
+          <Text style={{ color: AppTheme.colors.textMuted, fontSize: 13, fontWeight: "600" }}>Password</Text>
 
-          <View className="flex-row items-center rounded-xl border border-zinc-400 pr-3">
+          <View className="flex-row items-center rounded-2xl border px-3" style={{ borderColor: AppTheme.colors.border }}>
             <TextInput
-              className="flex-1 py-2 pr-2 pl-2"
-              placeholder="••••••••"
+              className="flex-1 py-3"
+              style={{ fontSize: AppTheme.typography.body }}
+              placeholder="********"
               secureTextEntry={!showPassword}
               value={password}
               onChangeText={setPassword}
@@ -79,7 +120,7 @@ export default function Login() {
               <Ionicons
                 name={showPassword ? "eye-off" : "eye"}
                 size={20}
-                color="gray"
+                color={AppTheme.colors.textMuted}
               />
             </Pressable>
           </View>
@@ -87,21 +128,23 @@ export default function Login() {
           <Pressable
             onPress={handleLogin}
             disabled={isSubmitting}
-            className="mt-10 mb-3 rounded-xl bg-blue-500 py-4 disabled:opacity-60"
+            className="mt-8 mb-3 rounded-2xl py-4 disabled:opacity-60"
+            style={{ backgroundColor: AppTheme.colors.primary }}
           >
-            <Text className="text-center text-white">
+            <Text className="text-center text-base font-semibold text-white">
               {isSubmitting ? "Logging in..." : "Login"}
             </Text>
           </Pressable>
 
-          <Text className="text-center text-sm">
-            Don't have an account?{" "}
-            <Link href="/auth/register" className="font-medium text-blue-500">
+          <Text style={{ textAlign: "center", fontSize: 14, color: AppTheme.colors.textMuted }}>
+            Don&apos;t have an account?{" "}
+            <Link href="/auth/register" style={{ color: AppTheme.colors.primary, fontWeight: "700" }}>
               Register
             </Link>
           </Text>
         </View>
       </View>
-    </View>
+      </View>
+    </KeyboardAvoidingView>
   );
 }

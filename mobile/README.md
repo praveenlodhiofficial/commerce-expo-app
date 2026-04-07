@@ -46,9 +46,16 @@ To learn more about developing your project with Expo, look at the following res
 
 Join our community of developers creating universal apps.
 
-The app uses a platform-aware API base URL in `mobile/config/index.ts`:
+The app resolves the API base URL in `mobile/config/index.ts` in this order:
 
-- Android emulator: `http://10.0.2.2:3000`
-- iOS simulator, Expo Go, or web: `http://192.168.204.1:3000`
+- `EXPO_PUBLIC_API_BASE_URL` (if provided)
+- Host auto-detected from Metro bundle URL (works for emulator and physical devices in dev)
+- Fallbacks: Android emulator `http://10.0.2.2:3000`, otherwise `http://192.168.204.1:3000`
 
-If your LAN IP changes, update the non-Android URL in that config file. Do not use `localhost` from a physical device.
+For a real phone, prefer setting `EXPO_PUBLIC_API_BASE_URL` in `.env`, for example:
+
+```bash
+EXPO_PUBLIC_API_BASE_URL=http://192.168.1.20:3000
+```
+
+Use your machine's LAN IP and make sure phone and laptop are on the same network. Do not use `localhost` from a physical device.

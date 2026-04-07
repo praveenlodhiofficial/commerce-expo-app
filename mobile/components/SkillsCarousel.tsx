@@ -1,13 +1,12 @@
 import React, { useRef } from "react";
 import { Animated, Dimensions } from "react-native";
-import { View } from "react-native";
 
 import HexagonCard from "@/components/HexagonCard";
 
 const { width } = Dimensions.get("window");
 
-const ITEM_WIDTH = 230;
-const SPACING = -15;
+const ITEM_WIDTH = 244;
+const SPACING = -25;
 const FULL_SIZE = ITEM_WIDTH + SPACING;
 
 const data = [
@@ -64,24 +63,23 @@ export function SkillsCarousel() {
 
         const scale = scrollX.interpolate({
           inputRange,
-          outputRange: [0.5, 1, 0.5],
+          outputRange: [0.6, 1, 0.6],
           extrapolate: "clamp",
         });
 
         const opacity = scrollX.interpolate({
           inputRange,
-          outputRange: [0.7, 1, 0.7],
+          outputRange: [0.6, 1, 0.6],
           extrapolate: "clamp",
         });
 
         return (
           <Animated.View
+            className="items-center justify-center"
             style={{
               width: ITEM_WIDTH,
-              height: 260,
+              height: 284,
               marginHorizontal: SPACING / 2,
-              justifyContent: "center",
-              alignItems: "center",
               transform: [{ scale }],
               opacity,
             }}

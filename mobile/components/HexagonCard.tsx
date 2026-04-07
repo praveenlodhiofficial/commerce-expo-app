@@ -36,8 +36,8 @@ export default function HexagonCard({
           {/* Gradient overlay */}
           <LinearGradient id="grad" x1="0" y1="0" x2="0" y2="1">
             <Stop offset="0%" stopColor="transparent" />
-            <Stop offset="60%" stopColor="rgba(0,0,0,0.2)" />
-            <Stop offset="100%" stopColor="rgba(0,0,0,0.6)" />
+            <Stop offset="56%" stopColor="rgba(0,0,0,0.24)" />
+            <Stop offset="100%" stopColor="rgba(0,0,0,0.72)" />
           </LinearGradient>
         </Defs>
 
@@ -59,12 +59,13 @@ export default function HexagonCard({
         />
 
         {/* Border */}
-        <Path d={pathData} stroke="rgba(0,0,0,0.08)" fill="none" />
+        <Path d={pathData} stroke="rgba(255,255,255,0.3)" fill="none" />
       </Svg>
 
-      {/* TEXT OVERLAY */}
       {title && (
-        <Text className="absolute bottom-10 h-fit w-40 items-center px-4 text-center text-lg font-bold text-white">
+        <Text
+          className="absolute bottom-10 h-fit w-44 items-center px-4 text-center font-bold leading-6 text-white"
+        >
           {title?.split(" ").map((word, index) => (
             <Text key={index}>
               {word}

@@ -1,267 +1,188 @@
 import React from "react";
 import {
-  SafeAreaView,
+  Pressable,
   ScrollView,
   StatusBar,
   Text,
-  TouchableOpacity,
   View,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-// ── Types ──────────────────────────────────────────────────────────────────
-type DayStatus = "active" | "missed" | "future";
+import { Ionicons } from "@expo/vector-icons";
 
-interface WeekDay {
+import { AppTheme } from "@/constants/theme";
+
+type ProfileStat = {
   label: string;
-  status: DayStatus;
-}
-
-// ── Day Circle ─────────────────────────────────────────────────────────────
-const DayCircle = ({ day, status }: { day: string; status: DayStatus }) => {
-  const circleClass =
-    status === "active"
-      ? "bg-blue-500"
-      : status === "missed"
-        ? "bg-gray-200"
-        : "bg-gray-100";
-
-  const symbol = status === "active" ? "✓" : status === "missed" ? "✕" : "—";
-
-  const symbolClass =
-    status === "active"
-      ? "text-white font-semibold"
-      : "text-gray-400 font-medium";
-
-  return (
-    <View className="items-center gap-y-1">
-      <Text className="text-xs font-medium text-gray-500">{day}</Text>
-      <View
-        className={`h-9 w-9 items-center justify-center rounded-full ${circleClass}`}
-      >
-        <Text className={`text-sm ${symbolClass}`}>{symbol}</Text>
-      </View>
-    </View>
-  );
+  value: number;
+  icon: keyof typeof Ionicons.glyphMap;
 };
 
-// ── Stat Card ──────────────────────────────────────────────────────────────
-const StatCard = ({
-  emoji,
-  value,
-  label,
-}: {
-  emoji: string;
-  value: number;
-  label: string;
-}) => (
-  <View className="m-1.5 flex-1 items-center rounded-2xl bg-white px-3 py-5 shadow-sm">
-    <Text className="mb-1 text-3xl">{emoji}</Text>
-    <Text className="mb-1 text-3xl font-bold text-gray-800">{value}</Text>
-    <Text className="text-center text-xs leading-4 text-gray-400">{label}</Text>
-  </View>
-);
+const stats: ProfileStat[] = [
+  { label: "Challenges done", value: 0, icon: "trophy-outline" },
+  { label: "Skills unlocked", value: 0, icon: "sparkles-outline" },
+  { label: "Current streak", value: 0, icon: "flame-outline" },
+  { label: "Total active days", value: 0, icon: "calendar-outline" },
+];
 
-// ── Main Screen ────────────────────────────────────────────────────────────
+const week = ["M", "T", "W", "T", "F", "S", "S"];
+
 export default function ProfileScreen() {
-  const weekDays: WeekDay[] = [
-    { label: "M", status: "missed" },
-    { label: "Tu", status: "missed" },
-    { label: "W", status: "future" },
-    { label: "Th", status: "future" },
-    { label: "F", status: "future" },
-    { label: "S", status: "future" },
-    { label: "Su", status: "future" },
-  ];
-
-  const activeDaysThisWeek = weekDays.filter(
-    (d) => d.status === "active"
-  ).length;
-
   return (
-    <SafeAreaView className="flex-1 bg-white">
-      <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
-
-      {/* ── Header ── */}
-      <View className="flex-row items-center justify-between border-b border-gray-100 bg-white px-4 py-3">
-        <TouchableOpacity className="p-1.5">
-          <Text className="text-2xl text-gray-700">←</Text>
-        </TouchableOpacity>
-        <Text className="text-base font-semibold text-gray-900">
-          My Profile
-        </Text>
-        <TouchableOpacity className="p-1.5">
-          <Text className="text-xl text-red-400">⇥</Text>
-        </TouchableOpacity>
-      </View>
+    <SafeAreaView
+      className="flex-1"
+      style={{ backgroundColor: AppTheme.colors.background }}
+    >
+      <StatusBar barStyle="dark-content" backgroundColor={AppTheme.colors.background} />
 
       <ScrollView
-        className="flex-1 bg-gray-100"
-        contentContainerStyle={{ paddingBottom: 48 }}
         showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 124 }}
       >
-        {/* ── Profile Card ── */}
-        <View className="mb-3 items-center bg-white px-5 pt-8 pb-7">
-          {/* Avatar */}
-          <View className="relative mb-4">
-            <View className="h-24 w-24 items-center justify-center rounded-full bg-blue-400">
-              <Text className="text-3xl font-bold tracking-widest text-white">
-                PL
-              </Text>
+        <View className="px-5 pt-3">
+          <Text
+            style={{
+              fontSize: AppTheme.typography.h1,
+              fontWeight: "800",
+              color: AppTheme.colors.text,
+            }}
+          >
+            Your profile
+          </Text>
+          <Text
+            style={{
+              marginTop: 4,
+              marginBottom: 16,
+              fontSize: AppTheme.typography.body,
+              color: AppTheme.colors.textMuted,
+            }}
+          >
+            Track your growth, consistency, and impact.
+          </Text>
+        </View>
+
+        <View
+          className="mx-4 rounded-[28px] border px-5 py-6"
+          style={{ borderColor: AppTheme.colors.border, backgroundColor: AppTheme.colors.surface }}
+        >
+          <View className="flex-row items-center justify-between">
+            <View className="flex-row items-center gap-3">
+              <View
+                className="h-16 w-16 items-center justify-center rounded-full"
+                style={{ backgroundColor: "#FFD9E1" }}
+              >
+                <Text style={{ fontSize: 24, fontWeight: "800", color: AppTheme.colors.primaryDeep }}>
+                  PL
+                </Text>
+              </View>
+              <View>
+                <Text style={{ fontSize: 22, fontWeight: "800", color: AppTheme.colors.text }}>
+                  Praveen Lodhi
+                </Text>
+                <Text style={{ marginTop: 2, color: AppTheme.colors.textMuted }}>Member since Apr 2026</Text>
+              </View>
             </View>
-            <TouchableOpacity className="absolute right-0 bottom-0 h-8 w-8 items-center justify-center rounded-full border-2 border-white bg-blue-500">
-              <Text className="text-xs text-white">📷</Text>
-            </TouchableOpacity>
+            <Pressable
+              className="h-11 w-11 items-center justify-center rounded-full"
+              style={{ backgroundColor: AppTheme.colors.surfaceMuted }}
+            >
+              <Ionicons name="create-outline" size={20} color={AppTheme.colors.text} />
+            </Pressable>
           </View>
 
-          {/* Name */}
-          <Text className="mb-4 text-2xl font-bold text-gray-900">
-            Praveen Lodhi
-          </Text>
-
-          {/* Edit / Password buttons */}
-          <View className="mb-5 flex-row gap-x-3">
-            <TouchableOpacity className="flex-row items-center gap-x-1.5 rounded-full border border-gray-200 px-4 py-2">
-              <Text className="text-sm text-blue-500">✏️</Text>
-              <Text className="text-sm font-medium text-blue-500">
-                Edit Profile
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity className="flex-row items-center gap-x-1.5 rounded-full border border-gray-200 px-4 py-2">
-              <Text className="text-sm text-blue-500">🔑</Text>
-              <Text className="text-sm font-medium text-blue-500">
+          <View className="mt-5 flex-row gap-2">
+            <Pressable
+              className="flex-1 rounded-2xl px-4 py-3"
+              style={{ backgroundColor: AppTheme.colors.primary }}
+            >
+              <Text className="text-center text-sm font-semibold text-white">Edit Profile</Text>
+            </Pressable>
+            <Pressable
+              className="flex-1 rounded-2xl border px-4 py-3"
+              style={{ borderColor: AppTheme.colors.border, backgroundColor: AppTheme.colors.surface }}
+            >
+              <Text
+                className="text-center text-sm font-semibold"
+                style={{ color: AppTheme.colors.text }}
+              >
                 Change Password
               </Text>
-            </TouchableOpacity>
+            </Pressable>
           </View>
 
-          {/* Upgrade Plan */}
-          <TouchableOpacity className="mb-6 w-full flex-row items-center justify-center gap-x-2 rounded-full bg-indigo-600 px-8 py-3.5">
-            <Text className="text-base text-white">🚀</Text>
-            <Text className="text-base font-semibold text-white">
-              Upgrade Plan
-            </Text>
-          </TouchableOpacity>
-
-          {/* XP Bar */}
-          <View className="mb-1 w-full">
-            <View className="h-2 w-full overflow-hidden rounded-full bg-gray-200">
-              <View className="h-full w-0 rounded-full bg-indigo-400" />
+          <View className="mt-6">
+            <View className="h-2 overflow-hidden rounded-full" style={{ backgroundColor: AppTheme.colors.surfaceMuted }}>
+              <View className="h-full w-1/3 rounded-full" style={{ backgroundColor: AppTheme.colors.primary }} />
             </View>
-          </View>
-          <Text className="mb-5 text-xs text-gray-400">
-            Level & XP Coming Soon
-          </Text>
-
-          {/* Friends */}
-          <Text className="text-3xl font-bold text-gray-800">0</Text>
-          <Text className="mb-4 text-sm text-gray-400">Friends</Text>
-
-          <View className="flex-row gap-x-3">
-            <TouchableOpacity className="flex-row items-center gap-x-1.5 rounded-full bg-blue-50 px-5 py-2.5">
-              <Text className="text-sm text-blue-500">👥</Text>
-              <Text className="text-sm font-medium text-blue-500">
-                Find Friends
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity className="flex-row items-center gap-x-1.5 rounded-full bg-gray-100 px-5 py-2.5">
-              <Text className="text-sm text-gray-500">✉️</Text>
-              <Text className="text-sm font-medium text-gray-500">
-                Requests
-              </Text>
-            </TouchableOpacity>
+            <Text style={{ marginTop: 8, fontSize: 12, color: AppTheme.colors.textMuted }}>
+              32 XP this week
+            </Text>
           </View>
         </View>
 
-        {/* ── My Why ── */}
-        <View className="mx-3 mb-3 rounded-2xl bg-white p-5 shadow-sm">
-          <View className="mb-3 flex-row items-center gap-x-3">
-            <View className="h-10 w-10 items-center justify-center rounded-xl bg-pink-50">
-              <Text className="text-lg">❤️</Text>
-            </View>
-            <Text className="text-base font-bold text-gray-800">My Why</Text>
-          </View>
-          <View className="mb-4 h-px bg-gray-100" />
-          <Text className="mb-3 text-sm leading-6 text-gray-700">
-            I'm doing it because I want to improve myself.{"\n"}I refuse to keep
-            myself stagnant when it comes to learning.{"\n"}
-            I'm becoming a better version of myself
-          </Text>
-          <Text className="mb-4 text-xs text-gray-400">
-            Last updated: Apr 5, 2026
-          </Text>
-          <TouchableOpacity className="flex-row items-center justify-center gap-x-2 rounded-xl bg-pink-50 py-3">
-            <Text className="text-sm text-pink-500">✏️</Text>
-            <Text className="text-sm font-semibold text-pink-500">
-              Edit My Why
+        <View
+          className="mx-4 mt-4 rounded-[24px] border p-5"
+          style={{ borderColor: AppTheme.colors.border, backgroundColor: AppTheme.colors.surface }}
+        >
+          <View className="mb-4 flex-row items-center justify-between">
+            <Text style={{ fontSize: 20, fontWeight: "800", color: AppTheme.colors.text }}>
+              Weekly activity
             </Text>
-          </TouchableOpacity>
-        </View>
-
-        {/* ── Weekly Activity ── */}
-        <View className="mx-3 mb-3 rounded-2xl bg-white p-5 shadow-sm">
-          <View className="mb-5 flex-row items-center gap-x-2">
-            <Text className="text-xl">🔥</Text>
-            <Text className="text-base font-bold text-gray-800">
-              Weekly Activity
-            </Text>
+            <Text style={{ fontSize: 13, color: AppTheme.colors.textMuted }}>0 / 7 active days</Text>
           </View>
-          <View className="mb-4 flex-row justify-between">
-            {weekDays.map((d) => (
-              <DayCircle key={d.label} day={d.label} status={d.status} />
+          <View className="flex-row justify-between">
+            {week.map((day, index) => (
+              <View key={`${day}-${index}`} className="items-center gap-2">
+                <Text style={{ fontSize: 12, color: AppTheme.colors.textMuted }}>{day}</Text>
+                <View
+                  className="h-10 w-10 items-center justify-center rounded-full"
+                  style={{ backgroundColor: AppTheme.colors.surfaceMuted }}
+                >
+                  <Text style={{ color: "#A096A3", fontWeight: "700" }}>-</Text>
+                </View>
+              </View>
             ))}
           </View>
-          <Text className="text-center text-xs text-gray-400">
-            {activeDaysThisWeek} / 7 days active this week
-          </Text>
         </View>
 
-        {/* ── Statistics ── */}
-        <Text className="mx-4 mt-2 mb-1 text-lg font-bold text-gray-800">
-          Statistics:
-        </Text>
-        <View className="mx-1.5">
-          <View className="flex-row">
-            <StatCard emoji="🏆" value={0} label="Challenges completed" />
-            <StatCard emoji="🎓" value={0} label="Acquired skills" />
+        <View className="mx-4 mt-4">
+          <Text style={{ marginBottom: 10, fontSize: 20, fontWeight: "800", color: AppTheme.colors.text }}>
+            Stats
+          </Text>
+          <View className="flex-row flex-wrap justify-between">
+            {stats.map((item) => (
+              <View
+                key={item.label}
+                className="mb-3 w-[48%] rounded-[22px] border p-4"
+                style={{ borderColor: AppTheme.colors.border, backgroundColor: AppTheme.colors.surface }}
+              >
+                <Ionicons name={item.icon} size={20} color={AppTheme.colors.primary} />
+                <Text style={{ marginTop: 12, fontSize: 26, fontWeight: "800", color: AppTheme.colors.text }}>
+                  {item.value}
+                </Text>
+                <Text style={{ marginTop: 4, fontSize: 13, color: AppTheme.colors.textMuted }}>
+                  {item.label}
+                </Text>
+              </View>
+            ))}
           </View>
-          <View className="flex-row">
-            <StatCard emoji="📅" value={0} label="Active days streak" />
-            <StatCard emoji="🔥" value={0} label="Total active days" />
-          </View>
         </View>
 
-        {/* ── My Badges ── */}
-        <Text className="mx-4 mt-4 mb-2 text-lg font-bold text-gray-800">
-          My badges
-        </Text>
-        <View className="mx-3 mb-3 items-center rounded-2xl bg-white p-8 shadow-sm">
-          <Text className="mb-3 text-5xl text-gray-300">🏅</Text>
-          <Text className="mb-1 text-base font-semibold text-gray-500">
-            Badges Coming Soon
+        <View className="mx-4 mt-2 rounded-[24px] border p-5" style={{ borderColor: AppTheme.colors.border, backgroundColor: AppTheme.colors.surface }}>
+          <Text style={{ fontSize: 20, fontWeight: "800", color: AppTheme.colors.text, marginBottom: 8 }}>
+            My Why
           </Text>
-          <Text className="text-center text-xs leading-5 text-gray-400">
-            Earn badges by completing skills and challenges
+          <Text style={{ color: AppTheme.colors.text, lineHeight: 24 }}>
+            I want to keep improving, one focused day at a time. Small wins compound into a better version of me.
           </Text>
+          <Pressable
+            className="mt-4 rounded-2xl px-4 py-3 bg-blue-100"
+          >
+            <Text className="text-center text-sm font-semibold text-blue-600">
+              Edit My Why
+            </Text>
+          </Pressable>
         </View>
-
-        {/* ── Skill Progress ── */}
-        <Text className="mx-4 mt-2 mb-2 text-lg font-bold text-gray-800">
-          Skill progress
-        </Text>
-        <View className="mx-3 mb-3 items-center rounded-2xl bg-white p-8 shadow-sm">
-          <Text className="mb-3 text-5xl text-gray-300">📖</Text>
-          <Text className="mb-1 text-base font-semibold text-gray-500">
-            No Progress Yet
-          </Text>
-          <Text className="text-center text-xs leading-5 text-gray-400">
-            Start learning skills to track your progress here
-          </Text>
-        </View>
-
-        {/* ── Member Since ── */}
-        <Text className="mt-4 text-center text-xs text-gray-400">
-          Member since April 2026
-        </Text>
       </ScrollView>
     </SafeAreaView>
   );

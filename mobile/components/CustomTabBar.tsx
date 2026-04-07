@@ -1,15 +1,17 @@
 import { useRef } from "react";
 import { View, Pressable, Text, Animated } from "react-native";
-import Svg, { Rect, Circle, Path, Line, Polyline } from "react-native-svg";
+import Svg, { Rect, Circle, Path } from "react-native-svg";
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { LinearGradient } from "expo-linear-gradient";
 
+import { AppTheme } from "@/constants/theme";
+
 const TAB_CONFIG = {
-  skills:     { label: "Skills",     activeColor: "#f97316" },
-  tribe:      { label: "Tribe",      activeColor: "#f97316" },
-  challenges: { label: "Challenges", activeColor: "#f97316" },
-  wall:       { label: "Wall",       activeColor: "#f97316" },
-  profile:    { label: "Profile",    activeColor: "#f97316" },
+  skills:     { label: "Discover", activeColor: AppTheme.colors.primary },
+  tribe:      { label: "Tribe", activeColor: AppTheme.colors.primary },
+  challenges: { label: "Goals", activeColor: AppTheme.colors.primary },
+  wall:       { label: "Wall", activeColor: AppTheme.colors.primary },
+  profile:    { label: "Me", activeColor: AppTheme.colors.primary },
 };
 
 function TabIcon({ name, size = 22, color }: { name: string; size?: number; color: string }) {
@@ -44,19 +46,17 @@ export default function CustomTabBar({ state, navigation }: BottomTabBarProps) {
   };
 
   return (
-    <View style={{ position: "absolute", bottom: 16, left: 12, right: 12 }}>
-      <View style={{ borderRadius: 28, overflow: "hidden" }}>
+    <View className="absolute bottom-3.5 left-3 right-3">
+      <View className="overflow-hidden rounded-3xl">
         <LinearGradient
-          colors={["rgba(15,12,41,0.6)", "rgba(26,16,64,0.55)"]}
+          colors={["#FFFFFF", "#FFF8FA"]}
+          className="flex-row items-center justify-around rounded-3xl border border-[#F0E6E8] px-2.5 py-2.5"
           style={{
-            flexDirection: "row",
-            justifyContent: "space-around",
-            alignItems: "center",
-            paddingVertical: 10,
-            paddingHorizontal: 8,
-            borderRadius: 28,
-            borderWidth: 0.5,
-            borderColor: "rgba(255,255,255,0.18)",
+            shadowColor: "#311a21",
+            shadowOpacity: 0.15,
+            shadowRadius: 16,
+            shadowOffset: { width: 0, height: 8 },
+            elevation: 10,
           }}
         >
           {state.routes.map((route, index) => {
@@ -65,12 +65,9 @@ export default function CustomTabBar({ state, navigation }: BottomTabBarProps) {
 
             return (
               <Animated.View key={route.key} style={{ transform: [{ scale: scaleAnims[index] }] }}>
-                <Pressable onPress={() => handlePress(route, index, isFocused)} style={{ alignItems: "center", paddingHorizontal: 14, paddingVertical: 6, borderRadius: 20, backgroundColor: isFocused ? "rgba(249,115,22,0.15)" : "transparent", borderWidth: isFocused ? 0.5 : 0, borderColor: "rgba(249,115,22,0.35)", minWidth: 52 }}>
-                  {isFocused && (
-                    <View style={{ position: "absolute", top: -1, left: "50%", marginLeft: -2, width: 4, height: 4, borderRadius: 2, backgroundColor: "#f97316", shadowColor: "#f97316", shadowOpacity: 0.9, shadowRadius: 6, shadowOffset: { width: 0, height: 0 } }} />
-                  )}
-                  <TabIcon name={route.name} color={isFocused ? "#f97316" : "rgba(255,255,255,0.4)"} />
-                  <Text style={{ fontSize: 10, marginTop: 4, fontWeight: isFocused ? "600" : "500", color: isFocused ? "#f97316" : "rgba(255,255,255,0.35)", letterSpacing: 0.3 }}>
+                <Pressable className="items-center rounded-full px-3.5 py-1.5" onPress={() => handlePress(route, index, isFocused)}>
+                  <TabIcon name={route.name} color={isFocused ? AppTheme.colors.primary : "#9D8F97"} />
+                  <Text className={`mt-1 text-[11px] ${isFocused ? "font-bold text-blue-700" : "font-medium text-[#9D8F97]"}`}>
                     {config?.label ?? route.name}
                   </Text>
                 </Pressable>
