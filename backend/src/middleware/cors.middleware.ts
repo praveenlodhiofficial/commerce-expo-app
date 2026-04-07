@@ -1,24 +1,13 @@
 import cors, { type CorsOptionsDelegate } from "cors";
 
+import { config } from "@/config";
+
 const LOCAL_NETWORK_ORIGIN = /^(https?:\/\/)?(localhost|127(?:\.\d{1,3}){3}|10(?:\.\d{1,3}){3}|192\.168(?:\.\d{1,3}){2}|172\.(1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(:\d+)?$/i;
 const EXPO_ORIGIN = /^(exp|exps|expo):\/\//i;
 
-function getAllowedOrigins() {
-	const configuredOrigins = process.env.CORS_ORIGIN;
-
-	if (!configuredOrigins) {
-		return [];
-	}
-
-	return configuredOrigins
-		.split(",")
-		.map((origin) => origin.trim())
-		.filter(Boolean);
-}
-
 const corsOptions: CorsOptionsDelegate = (req, callback) => {
 	const origin = req.headers.origin;
-	const allowedOrigins = getAllowedOrigins();
+	const allowedOrigins = config.cors.origins;
 
 	if (!origin) {
 		return callback(null, { origin: true, credentials: true });

@@ -46,5 +46,10 @@ To learn more about developing your project with Expo, look at the following res
 
 Join our community of developers creating universal apps.
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+
+The app uses a platform-aware API base URL in `mobile/config/index.ts`:
+
+- Android emulator: `http://10.0.2.2:3000`
+- iOS simulator, Expo Go, or web: `http://192.168.204.1:3000`
+
+If your LAN IP changes, update the non-Android URL in that config file. Do not use `localhost` from a physical device.

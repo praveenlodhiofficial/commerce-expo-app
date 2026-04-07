@@ -1,10 +1,11 @@
 import { PrismaPg } from "@prisma/adapter-pg";
 
+import { config } from "@/config";
 import { PrismaClient } from "@/generated/prisma/client";
 
 const prismaClientSingleton = () => {
   const adapter = new PrismaPg({
-    connectionString: process.env.DATABASE_URL_POOLER || process.env.DATABASE_URL,
+    connectionString: config.database.poolerUrl || config.database.url,
   });
 
   return new PrismaClient({
@@ -20,6 +21,6 @@ const globalForPrisma = globalThis as unknown as {
 
 export const prisma = globalForPrisma.prisma ?? prismaClientSingleton();
 
-if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
+if (!config.isProduction) globalForPrisma.prisma = prisma;
 
 export default prisma;

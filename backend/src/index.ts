@@ -14,6 +14,9 @@ app.use(corsMiddleware);
 
 /* ================================ Routes ================================= */
 app.use("/api/v1", authRoutes);
+app.get("/", (req, res) => {
+  res.send("Backend working");
+});
 
 /* ================================ Server ================================= */
 app.listen(config.port, () => {

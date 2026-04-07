@@ -13,7 +13,7 @@ export async function authMiddleware(req: Request, _res: Response, next: NextFun
 		const session = await getSessionFromBearerToken(req, {
 			secret: config.auth.jwtSecret,
 			ttlSeconds: config.auth.accessTokenTtlSeconds,
-			secure: process.env.NODE_ENV === "production",
+			secure: config.isProduction,
 		});
 
 		if (!session) {

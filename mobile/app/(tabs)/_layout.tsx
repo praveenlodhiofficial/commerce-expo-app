@@ -1,12 +1,26 @@
 import React from "react";
 
+import { ActivityIndicator, View } from "react-native";
+
 import { Ionicons } from "@expo/vector-icons";
 import { Redirect, router, Tabs } from "expo-router";
 
 import { useAuth } from "@/hooks/use-auth";
 
 export default function HomeLayout() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isLoading } = useAuth();
+
+  if (isLoading) {
+    return (
+      <View className="flex-1 items-center justify-center bg-[#EAF5FF]">
+        <ActivityIndicator size="large" color="#0F5BD1" />
+      </View>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return <Redirect href="/auth/login" />;
+  }
 
   return (
     <Tabs
@@ -40,7 +54,7 @@ export default function HomeLayout() {
             if (!isAuthenticated) {
               // Prevent default action
               e.preventDefault();
-              router.push("/auth/signin");
+              router.push("/auth/login");
             }
           },
         }}
@@ -53,12 +67,12 @@ export default function HomeLayout() {
             if (!isAuthenticated) {
               // Prevent default action
               e.preventDefault();
-              router.push("/auth/signin");
+              router.push("/auth/login");
             }
           },
         }}
       />
-      
+
       {/* <Tabs.Screen name="cart" options={{ title: "Cart" }} /> */}
       {/* <Tabs.Screen name="profile" options={{ title: "Profile" }} /> */}
     </Tabs>

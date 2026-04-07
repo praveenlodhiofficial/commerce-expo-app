@@ -1,6 +1,7 @@
 import { Response } from "express";
 import { z, ZodError } from "zod";
 
+import { config } from "@/config";
 import { ApiError } from "@/utils/api-error";
 
 /* ============================================================================= */
@@ -50,7 +51,7 @@ export function sendErrorResponse(error: unknown, res: Response) {
     response = {
       success: false,
       message: error.message || "Internal server error",
-      ...(process.env.NODE_ENV === "development" && {
+      ...(config.isDevelopment && {
         stack: error.stack,
       }),
     };
