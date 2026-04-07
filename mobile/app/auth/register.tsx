@@ -1,12 +1,12 @@
 import { useState } from "react";
 import {
+  KeyboardAvoidingView,
+  Platform,
   Pressable,
+  ScrollView,
   Text,
   TextInput,
   View,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
 } from "react-native";
 
 import { Ionicons } from "@expo/vector-icons";
@@ -63,14 +63,11 @@ export default function Register() {
         >
           <View className="p-3">
             <View className="rounded-[60px] rounded-tl-[999px] bg-white/80 p-5 shadow-inner shadow-white/70 backdrop-blur-2xl">
-              
               <Text className="mb-8 text-4xl font-medium">Register</Text>
 
               {errorMessage ? (
                 <View className="mb-4 rounded-2xl bg-red-50 px-4 py-3">
-                  <Text className="text-sm text-red-600">
-                    {errorMessage}
-                  </Text>
+                  <Text className="text-sm text-red-600">{errorMessage}</Text>
                 </View>
               ) : null}
 
@@ -105,16 +102,14 @@ export default function Register() {
 
                 <View className="flex-row items-center rounded-xl border border-zinc-400 pr-3">
                   <TextInput
-                    className="flex-1 py-2 pl-2 pr-2"
+                    className="flex-1 py-2 pr-2 pl-2"
                     placeholder="••••••••"
                     secureTextEntry={!showPassword}
                     value={password}
                     onChangeText={setPassword}
                   />
 
-                  <Pressable
-                    onPress={() => setShowPassword(!showPassword)}
-                  >
+                  <Pressable onPress={() => setShowPassword(!showPassword)}>
                     <Ionicons
                       name={showPassword ? "eye-off" : "eye"}
                       size={20}
@@ -123,7 +118,7 @@ export default function Register() {
                   </Pressable>
                 </View>
 
-{/* Forgot Password */}
+                {/* Forgot Password */}
                 <Text className="mb-5 text-right text-sm text-blue-500">
                   Forgot Password ?
                 </Text>
@@ -134,9 +129,7 @@ export default function Register() {
                   className="mb-3 rounded-xl bg-blue-500 py-4 disabled:opacity-60"
                 >
                   <Text className="text-center text-white">
-                    {isSubmitting
-                      ? "Creating account..."
-                      : "Register"}
+                    {isSubmitting ? "Creating account..." : "Register"}
                   </Text>
                 </Pressable>
 
@@ -150,7 +143,6 @@ export default function Register() {
                   </Link>
                 </Text>
               </View>
-
             </View>
           </View>
         </ScrollView>

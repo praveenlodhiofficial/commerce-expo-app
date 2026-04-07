@@ -46,7 +46,6 @@ To learn more about developing your project with Expo, look at the following res
 
 Join our community of developers creating universal apps.
 
-
 The app uses a platform-aware API base URL in `mobile/config/index.ts`:
 
 - Android emulator: `http://10.0.2.2:3000`
