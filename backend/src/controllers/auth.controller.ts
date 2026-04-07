@@ -1,12 +1,11 @@
 import { Request, Response } from "express";
 
-import { config } from "@/config";
 import { LoginSchema, RegisterSchema, UpdatePasswordSchema } from "@/schema/auth.schema";
 import { loginService, registerService, updatePasswordService } from "@/services/auth.service";
 import { createSession, refreshSession, revokeSession } from "@/services/session.service";
 import { ApiError } from "@/utils/api-error";
 import { sendErrorResponse } from "@/utils/error-handler";
-import { getSessionFromBearerToken } from "@/utils/session";
+import { config } from "@/config";
 
 /* ============================================================================= */
 /*                            REGISTER CONTROLLER                                */
@@ -121,11 +120,7 @@ export async function logoutController(req: Request, res: Response) {
 export async function updatePasswordController(req: Request, res: Response) {
   try {
     const parsed = UpdatePasswordSchema.parse(req.body);
-    const session = await getSessionFromBearerToken(req, {
-      secret: config.auth.jwtSecret,
-      ttlSeconds: config.auth.accessTokenTtlSeconds,
-      secure: process.env.NODE_ENV === "production",
-    });
+    const session = req.authUser;
 
     if (!session?.userId) {
       throw new ApiError(401, "Unauthorized");
