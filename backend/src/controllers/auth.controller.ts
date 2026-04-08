@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 
 import { LoginSchema, RegisterSchema, UpdatePasswordSchema } from "@/schema/auth.schema";
 import { loginService, registerService, updatePasswordService } from "@/services/auth.service";

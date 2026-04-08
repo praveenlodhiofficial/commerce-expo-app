@@ -38,7 +38,7 @@ export default function Login() {
         password,
       });
 
-      router.replace("/(tabs)/skills");
+      router.replace("/(tabs)/home");
     } catch (error) {
       setErrorMessage(error instanceof Error ? error.message : "Login failed");
     } finally {

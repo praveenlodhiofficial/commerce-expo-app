@@ -5,7 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { AppTheme } from "@/constants/theme";
 import { useAuth } from "@/hooks/use-auth";
 
-export default function ProfileScreen() {
+export default function CartScreen() {
   const { isAuthenticated, isLoading } = useAuth();
 
   if (isLoading) {
@@ -22,7 +22,7 @@ export default function ProfileScreen() {
 
   return (
     <SafeAreaView>
-      <Text>Profile</Text>
+      <Text>Cart</Text>
     </SafeAreaView>
   );
 }

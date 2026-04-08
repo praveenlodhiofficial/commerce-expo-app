@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma";
-import { RegisterInput } from "@/schema/auth.schema";
+import type { RegisterInput } from "@/schema/auth.schema";
 
 /* ============================================================================= */
 /*                             FIND USER BY EMAIL                               */

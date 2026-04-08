@@ -1,14 +1,13 @@
-import React from "react";
-import { ActivityIndicator, Pressable, View } from "react-native";
+import { Redirect, Tabs, useRouter } from 'expo-router';
+import React from 'react';
 
+import { HapticTab } from '@/components/haptic-tab';
 import { Ionicons } from "@expo/vector-icons";
-import { Redirect, Tabs, useRouter } from "expo-router";
+import { AppTheme } from '@/constants/theme';
+import { useAuth } from '@/hooks/use-auth';
+import { ActivityIndicator, View } from 'react-native';
 
-import CustomTabBar from "@/components/CustomTabBar";
-import { AppTheme } from "@/constants/theme";
-import { useAuth } from "@/hooks/use-auth";
-
-export default function HomeLayout() {
+export default function TabLayout() {
   const { isAuthenticated, isLoading } = useAuth();
   const router = useRouter();
 
@@ -24,42 +23,82 @@ export default function HomeLayout() {
     return <Redirect href="/auth/login" />;
   }
 
+
   return (
     <Tabs
-      tabBar={(props) => <CustomTabBar {...props} />}
-      screenOptions={{
-        headerShown: true,
-        headerShadowVisible: false,
-        headerStyle: {
-          backgroundColor: AppTheme.colors.background,
+      screenOptions={({ route }) => ({
+        headerShown: false,
+        tabBarActiveTintColor: "#000000",
+        tabBarButton: HapticTab,
+        tabBarInactiveTintColor: "gray",
+
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName: keyof typeof Ionicons.glyphMap;
+
+          if (route.name === "home") {
+            iconName = focused ? "home" : "home-outline";
+          } else if (route.name === "profile") {
+            iconName = focused ? "person" : "person-outline";
+          } else if (route.name === "cart") {
+            iconName = focused ? "cart" : "cart-outline";
+          } else if (route.name === "notification") {
+            iconName = focused ? "notifications" : "notifications-outline";
+          } else {
+            iconName = "ellipse";
+          }
+          return <Ionicons name={iconName} size={size} color={color} />;
         },
-        headerTitleStyle: {
-          fontSize: 22,
-          fontWeight: "700",
-          color: AppTheme.colors.text,
-        },
-        headerTitleAlign: "left",
-        headerRightContainerStyle: {
-          paddingRight: 14,
-        },
-        headerRight: () => (
-          <Pressable
-            accessibilityRole="button"
-            accessibilityLabel="Notifications"
-            onPress={() => router.push("/notifications")}
-            hitSlop={8}
-          >
-            <Ionicons name="notifications-outline" size={24} color={AppTheme.colors.text} />
-          </Pressable>
-        ),
-      }}
+      })}
     >
-      <Tabs.Screen name="skills" options={{ title: "Discover" }} />
-      <Tabs.Screen name="tribe" options={{ title: "Tribe" }} />
-      <Tabs.Screen name="challenges" options={{ title: "Challenges" }} />
-      <Tabs.Screen name="wall" options={{ title: "Wall" }} />
-      {/* in proflie header false */}
-      <Tabs.Screen name="profile" options={{ title: "Profile", headerShown: false }}   />
+      <Tabs.Screen
+        name="home"
+        options={{
+          title: 'Home',
+
+        }}
+      />
+      <Tabs.Screen
+        name="cart"
+        options={{
+          title: 'Cart',
+        }}
+        listeners={{
+          tabPress: (e) => {
+            if (!isAuthenticated) {
+              e.preventDefault();
+              router.replace("/auth/login");
+            }
+          },
+        }}
+      />
+      <Tabs.Screen
+        name="notification"
+        options={{
+          title: 'Notification',
+        }}
+        listeners={{
+          tabPress: (e) => {
+            if (!isAuthenticated) {
+              e.preventDefault();
+              router.replace("/auth/login");
+            }
+          },
+        }}
+      />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: 'Profile',
+        }}
+        listeners={{
+          tabPress: (e) => {
+            if (!isAuthenticated) {
+              e.preventDefault();
+              router.replace("/auth/login");
+            }
+          },
+        }}
+      />
     </Tabs>
   );
 }

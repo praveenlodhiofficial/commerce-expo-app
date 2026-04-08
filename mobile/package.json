@@ -1,5 +1,5 @@
 {
-  "name": "mobile-app-expo",
+  "name": "mobile",
   "main": "expo-router/entry",
   "version": "1.0.0",
   "scripts": {
@@ -58,7 +58,7 @@
     "typescript": "~5.9.2"
   },
   "private": true,
-  "pnpm": {
+  "bun": {
     "overrides": {
       "lightningcss": "1.30.1"
     }

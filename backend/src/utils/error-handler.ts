@@ -1,4 +1,4 @@
-import { Response } from "express";
+import type { Response } from "express";
 import { z, ZodError } from "zod";
 
 import { config } from "@/config";
@@ -18,7 +18,7 @@ type ErrorResponse = {
 /*                           SEND ERROR RESPONSE                                */
 /* ============================================================================= */
 
-export function sendErrorResponse(error: unknown, res: Response) {
+export function sendErrorResponse(error: unknown, res: Response): Response {
   let statusCode = 500;
 
   let response: ErrorResponse = {
