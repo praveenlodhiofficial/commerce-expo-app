@@ -46,14 +46,14 @@ export default function CustomTabBar({ state, navigation }: BottomTabBarProps) {
   };
 
   return (
-    <View className="absolute bottom-3.5 left-3 right-3">
-      <View className="overflow-hidden rounded-3xl">
+    <View className="absolute bottom-0 left-0 right-0 bg-transparent">
+      <View className="overflow-hidden rounded-b-4xl">
         <LinearGradient
           colors={["#FFFFFF", "#FFF8FA"]}
-          className="flex-row items-center justify-around rounded-3xl border border-[#F0E6E8] px-2.5 py-2.5"
+          className="flex-row  items-center justify-around rounded-3xl border border-[#F0E6E8]  px-2.5 py-2.5"
           style={{
             shadowColor: "#311a21",
-            shadowOpacity: 0.15,
+            shadowOpacity: 0.5,
             shadowRadius: 16,
             shadowOffset: { width: 0, height: 8 },
             elevation: 10,
@@ -66,8 +66,8 @@ export default function CustomTabBar({ state, navigation }: BottomTabBarProps) {
             return (
               <Animated.View key={route.key} style={{ transform: [{ scale: scaleAnims[index] }] }}>
                 <Pressable className="items-center rounded-full px-3.5 py-1.5" onPress={() => handlePress(route, index, isFocused)}>
-                  <TabIcon name={route.name} color={isFocused ? AppTheme.colors.primary : "#9D8F97"} />
-                  <Text className={`mt-1 text-[11px] ${isFocused ? "font-bold text-blue-700" : "font-medium text-[#9D8F97]"}`}>
+                  <TabIcon name={route.name} color={isFocused ? "#F97316" : "#9D8F97"} />
+                  <Text className={`mt-1 text-[11px] ${isFocused ? "font-bold text-amber-600" : "font-medium text-[#9D8F97]"}`}>
                     {config?.label ?? route.name}
                   </Text>
                 </Pressable>

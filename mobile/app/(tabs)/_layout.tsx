@@ -1,7 +1,8 @@
 import React from "react";
-import { ActivityIndicator, View } from "react-native";
+import { ActivityIndicator, Pressable, View } from "react-native";
 
-import { Redirect, Tabs } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
+import { Redirect, Tabs, useRouter } from "expo-router";
 
 import CustomTabBar from "@/components/CustomTabBar";
 import { AppTheme } from "@/constants/theme";
@@ -9,6 +10,7 @@ import { useAuth } from "@/hooks/use-auth";
 
 export default function HomeLayout() {
   const { isAuthenticated, isLoading } = useAuth();
+  const router = useRouter();
 
   if (isLoading) {
     return (
@@ -37,13 +39,27 @@ export default function HomeLayout() {
           color: AppTheme.colors.text,
         },
         headerTitleAlign: "left",
+        headerRightContainerStyle: {
+          paddingRight: 14,
+        },
+        headerRight: () => (
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="Notifications"
+            onPress={() => router.push("/notifications")}
+            hitSlop={8}
+          >
+            <Ionicons name="notifications-outline" size={24} color={AppTheme.colors.text} />
+          </Pressable>
+        ),
       }}
     >
       <Tabs.Screen name="skills" options={{ title: "Discover" }} />
       <Tabs.Screen name="tribe" options={{ title: "Tribe" }} />
       <Tabs.Screen name="challenges" options={{ title: "Challenges" }} />
       <Tabs.Screen name="wall" options={{ title: "Wall" }} />
-      <Tabs.Screen name="profile" options={{ title: "Profile" }} />
+      {/* in proflie header false */}
+      <Tabs.Screen name="profile" options={{ title: "Profile", headerShown: false }}   />
     </Tabs>
   );
 }

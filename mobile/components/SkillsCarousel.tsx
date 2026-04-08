@@ -2,6 +2,10 @@ import React, { useRef } from "react";
 import { Animated, Dimensions } from "react-native";
 
 import HexagonCard from "@/components/HexagonCard";
+import TheConnectionIcon from "@/assets/icons/the-connection.svg";
+import TheCreationIcon from "@/assets/icons/the-creation.svg";
+import TheFoundationIcon from "@/assets/icons/the-foundation.svg";
+import TheFuelIcon from "@/assets/icons/the-fuel.svg";
 
 const { width } = Dimensions.get("window");
 
@@ -14,21 +18,25 @@ const data = [
     id: "1",
     title: "The Foundation",
     uri: "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
+    icon: TheFoundationIcon,
   },
   {
     id: "2",
     title: "The Creation",
     uri: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee",
+    icon: TheCreationIcon,
   },
   {
     id: "3",
     title: "The Connection",
     uri: "https://images.unsplash.com/photo-1501785888041-af3ef285b470",
+    icon: TheConnectionIcon,
   },
   {
     id: "4",
     title: "The Fuel",
     uri: "https://images.unsplash.com/photo-1501785888041-af3ef285b470",
+    icon: TheFuelIcon,
   },
 ];
 
@@ -73,6 +81,18 @@ export function SkillsCarousel() {
           extrapolate: "clamp",
         });
 
+        const glowOpacity = scrollX.interpolate({
+          inputRange,
+          outputRange: [0.08, 0.45, 0.08],
+          extrapolate: "clamp",
+        });
+
+        const glowScale = scrollX.interpolate({
+          inputRange,
+          outputRange: [0.82, 1.06, 0.82],
+          extrapolate: "clamp",
+        });
+
         return (
           <Animated.View
             className="items-center justify-center"
@@ -84,7 +104,24 @@ export function SkillsCarousel() {
               opacity,
             }}
           >
-            <HexagonCard title={item.title} uri={item.uri} width={ITEM_WIDTH} />
+            <Animated.View
+              pointerEvents="none"
+              style={{
+                position: "absolute",
+                width: ITEM_WIDTH * 0.82,
+                height: ITEM_WIDTH * 0.82,
+                borderRadius: ITEM_WIDTH,
+                backgroundColor: "#F7E7A6",
+                opacity: glowOpacity,
+                transform: [{ scale: glowScale }],
+              }}
+            />
+            <HexagonCard
+              title={item.title}
+              uri={item.uri}
+              width={ITEM_WIDTH}
+              Icon={item.icon}
+            />
           </Animated.View>
         );
       }}

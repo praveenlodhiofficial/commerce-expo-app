@@ -8,19 +8,33 @@ const tintColorLight = "#0a7ea4";
 const tintColorDark = "#fff";
 
 export const AppTheme = {
+  // colors: {
+  //   primary: "#1E7BFF",
+  //   primaryDeep: "#0D5EE0",
+  //   accent: "#10233F",
+  //   background: "#F4F8FF",
+  //   surface: "#FFFFFF",
+  //   surfaceMuted: "#ECF3FF",
+  //   text: "#13213A",
+  //   textMuted: "#5A6C88",
+  //   success: "#19A870",
+  //   danger: "#E2465A",
+  //   border: "#D8E5FF",
+  // },
   colors: {
-    primary: "#1E7BFF",
-    primaryDeep: "#0D5EE0",
-    accent: "#10233F",
-    background: "#F4F8FF",
+    primary: "#D97706",
+    primaryDeep: "#B45309",
+    accent: "#3F2A0A",
+    background: "#ffffff",
     surface: "#FFFFFF",
-    surfaceMuted: "#ECF3FF",
-    text: "#13213A",
-    textMuted: "#5A6C88",
+    surfaceMuted: "#FFF4DB",
+    text: "#2B1C05",
+    textMuted: "#7A633B",
     success: "#19A870",
     danger: "#E2465A",
-    border: "#D8E5FF",
-  },
+    border: "#F2D6A2",
+  },  
+
   typography: {
     hero: 40,
     h1: 30,
